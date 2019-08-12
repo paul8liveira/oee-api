@@ -36,11 +36,11 @@ values(
 			select max(id) as id
 				 , mc_cd
 				 , concat(hour(inserted_at), \':00 - \', case hour(inserted_at) when 23 then \'00\' else hour(inserted_at)+1 end, \':00\') as hora
-				 , (case mc_cd when \'SQB10\' then ifnull(round(max(field2),2),0)  else 0 end) as SQB10
-				 , (case mc_cd when \'SQBI12\' then ifnull(round(max(field2),2),0)  else 0 end) as SQBI12
-				 , (case mc_cd when \'LB02\' then ifnull(round(max(field2),2),0)  else 0 end) as LB02
-				 , (case mc_cd when \'CABP031\' then ifnull(round(max(field2),2),0)  else 0 end) as CABP031
-				 , (case mc_cd when \'CABP032\' then ifnull(round(max(field2),2),0)  else 0 end) as CABP032
+				 , (case mc_cd when \'SQB10\' then ifnull(round(max(field3),2),0)  else 0 end) as SQB10
+				 , (case mc_cd when \'SQBI12\' then ifnull(round(max(field3),2),0)  else 0 end) as SQBI12
+				 , (case mc_cd when \'LB02\' then ifnull(round(max(field3),2),0)  else 0 end) as LB02
+				 , (case mc_cd when \'CABP031\' then ifnull(round(max(field3),2),0)  else 0 end) as CABP031
+				 , (case mc_cd when \'CABP032\' then ifnull(round(max(field3),2),0)  else 0 end) as CABP032
 				 , \'M/Hora\' as tipo
 				 , hour(inserted_at) ordem
 				from feed
