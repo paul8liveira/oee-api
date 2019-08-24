@@ -63,6 +63,7 @@ module.exports = function(api) {
                 , a.machine_name
                 , time_format(sec_to_time(sum(a.pause)*60), '%H:%i:%s') as pause_time
                 , sum(a.pause) as pause_in_minutes
+                , count(0) as incidents
                 , a.pause_reason
                 , a.pause_type
                 , a.type
