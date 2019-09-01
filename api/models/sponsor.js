@@ -8,7 +8,7 @@ module.exports = function(api) {
             connection.query(query, 
             [
                 data.channel_id,
-                data.name,
+                data.sponsor_name,
                 data.email
             ], 
             function(error, result) {
@@ -21,15 +21,15 @@ module.exports = function(api) {
     this.update = function(data, callback) {
         let query = `update sponsor 
                         set name = ?, 
-                            email = ?,
+                            email = ?
                       where id = ?`;
         
         _pool.getConnection(function(err, connection) {
             connection.query(query, 
             [
-                data.name, 
+                data.sponsor_name, 
                 data.email,
-                parseInt(data.id)
+                parseInt(data.sponsor_id)
             ], 
             function(error, result) {
                 connection.release();
@@ -42,7 +42,7 @@ module.exports = function(api) {
         _pool.getConnection(function(err, connection) {
             connection.query("call prc_delete_sponsor(?)", 
             [
-                parseInt(data.id)
+                parseInt(data.sponsor_id)
             ], 
             function(error, result) {
                 connection.release();

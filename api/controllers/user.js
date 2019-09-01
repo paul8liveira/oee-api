@@ -73,7 +73,6 @@ module.exports = function(api) {
     };
 
     this.getUserData = function(req, res, next) {
-        console.log(req);
         _user.getUserData(req.userId, function(exception, result) {
             if(exception) {
                 return res.status(500).send(exception);

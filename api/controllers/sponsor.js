@@ -7,7 +7,7 @@ module.exports = function(api) {
         //cria asserts para validação
         req.assert('channel_id', 'Preencha o canal corretamente.').notEmpty();
         req.assert('email', 'Preencha o email corretamente.').notEmpty();
-        req.assert('name', 'Preencha o nome corretamente.').notEmpty();
+        req.assert('sponsor_name', 'Preencha o nome corretamente.').notEmpty();
 
         var errors = req.validationErrors();
         if(errors)
@@ -17,7 +17,8 @@ module.exports = function(api) {
             if(exception) {
                 return res.status(400).send(exception);
             }
-            return res.status(200).send(result || body);
+            const sponsor = result[0][0] || {};
+            return res.status(200).send(sponsor || body);
         });          
                           
     }; 
@@ -28,7 +29,7 @@ module.exports = function(api) {
         //cria asserts para validação
         req.assert('channel_id', 'Preencha o canal corretamente.').notEmpty();
         req.assert('email', 'Preencha o email corretamente.').notEmpty();
-        req.assert('name', 'Preencha o nome corretamente.').notEmpty();
+        req.assert('sponsor_name', 'Preencha o nome corretamente.').notEmpty();
 
         var errors = req.validationErrors();
         if(errors)
@@ -47,7 +48,7 @@ module.exports = function(api) {
         const body = req.body;
 
         //cria asserts para validação
-        req.assert('id', 'Preencha o código corretamente.').notEmpty();
+        req.assert('sponsor_id', 'Preencha o código corretamente.').notEmpty();
 
         var errors = req.validationErrors();
         if(errors)

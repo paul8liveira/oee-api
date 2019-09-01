@@ -24,7 +24,7 @@ alter table alert add constraint fk_pause_reason foreign key(pause_reason_id) re
 DROP procedure IF EXISTS `prc_sponsor`;
 
 DELIMITER $$
-CREATE PROCEDURE prc_sponsor(
+CREATE PROCEDURE `prc_sponsor`(
 	in p_channel_id int(11),
     in p_name varchar(100),
     in p_email varchar(100)
@@ -36,12 +36,20 @@ begin
     end if;
     insert into sponsor(channel_id, name, email)
     values(p_channel_id, p_name, p_email);
-    
-	select *
-	  from sponsor
-	 where id = LAST_INSERT_ID(); 
+     
+     select s.id as sponsor_id
+            , s.channel_id
+            , c.name channel_name
+            , s.name as sponsor_name
+            , s.email
+        from sponsor s
+        inner join channel c on c.id = s.channel_id
+        where s.id = LAST_INSERT_ID();
+     
 end$$
+
 DELIMITER ;
+
 
 DROP procedure IF EXISTS `prc_alert`;
 
