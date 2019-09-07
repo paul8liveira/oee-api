@@ -68,7 +68,7 @@ module.exports = function(api) {
         inner join channel c on c.id = a.channel_id
         inner join sponsor s on s.id = a.sponsor_id
         inner join pause_reason pr on pr.id = a.pause_reason_id
-        where channel_id = ?`;
+        where a.channel_id = ?`;
         
         _pool.getConnection(function(err, connection) {
             connection.query(query, 
