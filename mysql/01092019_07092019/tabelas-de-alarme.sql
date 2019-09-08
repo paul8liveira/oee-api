@@ -58,23 +58,39 @@ CREATE PROCEDURE prc_alert (
 	in p_channel_id int(11),
     in p_sponsor_id int(11),
     in p_pause_reason_id int(11),
-    in pause_time tinyint
+    in p_pause_time tinyint
 )
 BEGIN
 	if exists (select 1 
 				 from alert 
 				where channel_id = p_channel_id 
                   and sponsor_id = p_sponsor_id 
-                  and pause_reason_id = p_pause_reason_id) then 
+                  and pause_reason_id = p_pause_reason_id
+                  and pause_time = p_pause_time) then 
 		signal sqlstate '99999'
 		set message_text = 'Configuração de alerta já existe';
     end if;
     insert into alert(channel_id, sponsor_id, pause_reason_id, pause_time)
     values(p_channel_id, p_sponsor_id, p_pause_reason_id, p_pause_time);
     
-	select *
-	  from alert
-	 where id = LAST_INSERT_ID(); 
+	select a.id
+		, a.channel_id
+		, c.name as channel_name
+		, a.sponsor_id
+		, s.name as sponsor_name
+		, a.pause_reason_id
+		, pr.name as pause_reason_name
+		, case a.pause_time
+			when 0 then 'Imediato'
+            when 5 then '5 minutos'
+            when 10 then '10 minutos'
+            when 30 then '30 minutos'
+		  end as pause_time
+	from alert a
+	inner join channel c on c.id = a.channel_id
+	inner join sponsor s on s.id = a.sponsor_id
+	inner join pause_reason pr on pr.id = a.pause_reason_id
+	where a.id = LAST_INSERT_ID();  
 END$$
 DELIMITER ;
 

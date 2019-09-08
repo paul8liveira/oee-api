@@ -18,7 +18,7 @@ module.exports = function(api) {
             if(exception) {
                 return res.status(400).send(exception);
             }
-            return res.status(200).send(result || body);
+            return res.status(200).send(result[0][0] || body);
         });          
                           
     }; 

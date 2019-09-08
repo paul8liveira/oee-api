@@ -63,7 +63,12 @@ module.exports = function(api) {
             , s.name as sponsor_name
             , a.pause_reason_id
             , pr.name as pause_reason_name
-            , a.pause_time
+            , case a.pause_time
+			    when 0 then 'Imediato'
+                when 5 then '5 minutos'
+                when 10 then '10 minutos'
+                when 30 then '30 minutos'
+		      end as pause_time
         from alert a
         inner join channel c on c.id = a.channel_id
         inner join sponsor s on s.id = a.sponsor_id
@@ -81,6 +86,39 @@ module.exports = function(api) {
             });
         });
     };
+
+    this.hasAlertToSend = function(filters, callback) {
+        var query = `
+            select s.name as sponsor_name 
+                , s.email as sponsor_email
+                , pr.name as pause_reason_name
+                , case a.pause_time
+                    when 0 then 'Imediato'
+                    when 5 then '5 minutos'
+                    when 10 then '10 minutos'
+                    when 30 then '30 minutos'
+                end as pause_time
+            from alert a
+            inner join sponsor s on s.id = a.sponsor_id
+            inner join pause_reason pr on pr.id = a.pause_reason_id
+            where a.channel_id = ?
+            and a.pause_reason_id = ?
+            and a.pause_time <= ?`;
+                    
+        _pool.getConnection(function(err, connection) {
+            connection.query(query, 
+            [ 
+                parseInt(filters.channel_id),
+                parseInt(filters.pause_reason_id),
+                parseInt(filters.pause),
+            ], 
+            function(error, result) {
+                connection.release();
+                callback(error, result);
+            });
+        });
+    };    
+
 
     return this;
 };
