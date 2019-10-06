@@ -1,0 +1,22 @@
+CREATE TABLE `action_improvement` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `channel_id` int(11) NOT NULL,
+  `machine_code` varchar(10) NOT NULL,
+  `pause_reason_id` int(11) NOT NULL,
+  `gain` varchar(20) DEFAULT NULL,
+  `description` varchar(100) DEFAULT NULL,
+  `detailing` mediumtext,
+  `owner` varchar(45) DEFAULT NULL,
+  `priority` int(1) DEFAULT NULL,
+  `status` int(1) DEFAULT NULL,
+  `starts_at` date DEFAULT NULL,
+  `finished_at` date DEFAULT NULL,
+  `created_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `fk_action_channel` (`channel_id`),
+  KEY `fk_action_machine` (`machine_code`),
+  KEY `fk_action_pause` (`pause_reason_id`),
+  CONSTRAINT `fk_action_channel` FOREIGN KEY (`channel_id`) REFERENCES `channel` (`id`),
+  CONSTRAINT `fk_action_machine` FOREIGN KEY (`machine_code`) REFERENCES `machine_data` (`code`),
+  CONSTRAINT `fk_action_pause` FOREIGN KEY (`pause_reason_id`) REFERENCES `pause_reason` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;

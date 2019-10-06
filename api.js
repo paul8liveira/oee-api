@@ -24,6 +24,9 @@ const shift_route = `${process.env.BASE_URL}shift`;
 const machineShift_route = `${process.env.BASE_URL}machineshift`;
 const sponsor_route = `${process.env.BASE_URL}sponsor`;
 const alert_route = `${process.env.BASE_URL}alert`;
+const action_improvement_route = `${process.env.BASE_URL}improvement/action`;
+const progress_improvement_route = `${process.env.BASE_URL}improvement/progress`;
+const resume_improvement_route = `${process.env.BASE_URL}improvement/resume`;
 
 //rotas que ouvimos
 api.use(index_route, api.routes.index);
@@ -45,6 +48,9 @@ api.use(shift_route, api.routes.shift);
 api.use(machineShift_route, api.routes.machineShift);
 api.use(sponsor_route, api.routes.sponsor);
 api.use(alert_route, api.routes.alert);
+api.use(action_improvement_route, api.routes.action_improvement);
+api.use(progress_improvement_route, api.routes.progress_improvement);
+api.use(resume_improvement_route, api.routes.resume_improvement);
 
 //rotas não encontradas serão respondidas por essa
 api.use((req, res, next) => {
