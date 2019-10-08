@@ -3,14 +3,17 @@ module.exports = function(api) {
     
     this.save = function(data, callback) {    
         _pool.getConnection(function(err, connection) {
-            connection.query("call prc_machine_pause(?,?,?,?,?,?)", 
+            connection.query(`
+                call prc_machine_pause(?,?,?,?,?,?,?,@machinePauseId);
+                select @machinePauseId as id;`, 
             [
                 data.token,
+                parseInt(data.id) || 0,
                 data.mc,
-                data.p,
-                data.sd,
-                data.ed,
-                data.pr
+                parseFloat(data.p) || 0,
+                data.sd || null,
+                data.ed || null,
+                parseInt(data.pr) || 0
             ], 
             function(error, result) {
                 connection.release();

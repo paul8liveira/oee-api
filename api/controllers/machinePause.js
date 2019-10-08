@@ -37,13 +37,14 @@ module.exports = function(api) {
     };    
 
     this.save = function(req, res, next) {
-        var query = req.query;  
+        const query = req.query; 
                       
         _machinePause.save(query, function(exception, result) {
             if(exception) {
                 return res.status(400).send(exception.sqlMessage);
             }
-            res.status(200).send(result.affectedRows === 1);                
+            const id = result[1][0] ? result[1][0].id.toString() : 0;
+            res.status(200).send(id);                
         });                 
     }; 
 
