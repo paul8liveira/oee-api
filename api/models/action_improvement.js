@@ -75,7 +75,7 @@ module.exports = function(api) {
         });    
     };
     
-    this.list = function(data, callback) {
+    this.list = function(action_id, callback) {
         var query = `
             select ai.id action_id
             , ai.channel_id
@@ -101,7 +101,7 @@ module.exports = function(api) {
         _pool.getConnection(function(err, connection) {
             connection.query(query, 
             [ 
-                parseInt(data.action_id)
+                parseInt(action_id)
             ], 
             function(error, result) {
                 connection.release();

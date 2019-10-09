@@ -76,14 +76,16 @@ module.exports = function(api) {
     };
     
     this.list = function(req, res, next) {
-        const body = req.body;
-        req.assert('action_id', 'Preencha o código da ação corretamente.').notEmpty();
+        const { action_id } = req.params;
+        
+        if ( action_id == undefined ){
+            return res.status(400).json({
+                "success": false,
+                "message": "Informe o id corretamente"
+            });
+        }
 
-        var errors = req.validationErrors();
-        if(errors)
-            return res.status(400).send(errors);
-
-        _action.list(body, function(exception, result) {
+        _action.list(action_id, function(exception, result) {
             if(exception) {
                 return res.status(500).send(exception);
             }
@@ -92,9 +94,16 @@ module.exports = function(api) {
     }; 
 
     this.listAll = function(req, res, next) {
-        const channelId = req.params.channel;
+        const { channel_id } = req.params;
         
-        _action.listAll(channelId, function(exception, result) {
+        if ( channel_id == undefined ){
+            return res.status(400).json({
+                "success": false,
+                "message": "Informe o id do canal"
+            });
+        }
+
+        _action.listAll(channel_id, function(exception, result) {
             if(exception) {
                 return res.status(500).send(exception);
             }
