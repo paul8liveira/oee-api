@@ -7,6 +7,7 @@ module.exports = function(api) {
     router.get('/', _machinePauseController.save); //iot
     router.get('/list', _tokenController.verify, _machinePauseController.list);
     router.get('/pareto', _tokenController.verify, _machinePauseController.pareto);
+    router.get('/alert', _machinePauseController.alert); //iot
 
     return router;
 };

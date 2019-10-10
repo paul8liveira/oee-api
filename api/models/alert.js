@@ -102,14 +102,16 @@ module.exports = function(api) {
             inner join sponsor s on s.id = a.sponsor_id
             inner join pause_reason pr on pr.id = a.pause_reason_id
             where a.channel_id = ?
-            and a.pause_reason_id = ?
-            and a.pause_time <= ?`;
+            and ((a.pause_reason_id = ?) or ? = 0)
+            and ((a.pause_time <= ?) or ? = 0)`;
                     
         _pool.getConnection(function(err, connection) {
             connection.query(query, 
             [ 
                 parseInt(filters.channel_id),
                 parseInt(filters.pause_reason_id),
+                parseInt(filters.pause_reason_id),
+                parseInt(filters.pause),
                 parseInt(filters.pause),
             ], 
             function(error, result) {
