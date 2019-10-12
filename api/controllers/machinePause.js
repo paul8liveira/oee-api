@@ -11,10 +11,10 @@ module.exports = function(api) {
                 return res.status(400).send(exception);
             }
             
-            const pauseFilter = {...result[0]};
+            const pauseFilter = {...result[0] };
         
             //verifica se tem alerta de pausa para enviar email
-            _alert.hasAlertToSend(pauseFilter, async function(exception, alerts) {
+            _alert.hasImmediateAlertToSend(pauseFilter, async function(exception, alerts) {
                 //se houve erro aqui, segue o processo e só faz um console
                 if(exception) console.error(exception);
                 
@@ -24,8 +24,9 @@ module.exports = function(api) {
                     const html = `
                         Identificamos que uma máquina está parada. Abaixo mais informações:
                         <br>Máquina: ${pauseFilter.machine_code}
-                        <br>Data inicial da pausa: ${pauseFilter.start_date}
-                        <br>Data final da pausa: ${pauseFilter.end_date || '-'} 
+                        <br>Início da pausa: ${pauseFilter.start_date}
+                        <br>Fim da pausa: ${pauseFilter.end_date || '-'}
+                        <br>Pausa estimada até o momento: ${pauseFilter.pause_in_time || '-'}
                     `;
                     await _mailer.send(mailsToAlert, 'Alerta de pausa', html);
                 }   

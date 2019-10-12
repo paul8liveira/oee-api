@@ -168,6 +168,7 @@ module.exports = function(api) {
                 , mp.pause_reason_id
                 , pr.name as pause_reason_name
                 , mp.pause
+                , sec_to_time(?*60) as pause_in_time
             from machine_pause mp
             inner join channel_machine cm on cm.machine_code = mp.mc_cd
             inner join channel c on c.id = cm.channel_id
@@ -178,6 +179,7 @@ module.exports = function(api) {
         _pool.getConnection(function(err, connection) {
             connection.query(query, 
             [
+                parseFloat(data.downtime || 0),
                 parseInt(data.id),
                 data.token
             ], 
