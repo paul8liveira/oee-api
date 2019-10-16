@@ -18,8 +18,8 @@ module.exports = function(api) {
         _pauseReason.list(id, function(exception, result) {
             if(exception) {
                 return res.status(500).send(exception);
-            }
-            res.status(200).send(result);
+            }            
+            res.status(200).send(result[0] || {});
         });                
     }; 
 
