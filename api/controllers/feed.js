@@ -34,10 +34,10 @@ module.exports = function(api) {
         });                 
     };
 
-    this.chart = function(req, res, next) {
+    this.chart = async(req, res, next) => {
         var query = req.query;        
         
-        _feed.chart(query, function(exception, result) {
+        await _feed.chart(query, async(exception, result) => {
             if(exception) {
                 return res.status(400).send(exception);
             }
@@ -83,10 +83,10 @@ module.exports = function(api) {
         });                 
     };
     
-    this.OEE = function(req, res, next) { 
+    this.OEE = async(req, res, next) => { 
         var query = req.query;
 
-        _feed.OEE(query, function(exception, result) {
+        await _feed.OEE(query, async(exception, result) => {
             if(exception) {
                 return res.status(400).send(exception);
             }
