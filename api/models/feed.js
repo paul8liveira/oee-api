@@ -129,20 +129,20 @@ module.exports = (api) => {
         });    
     };
 
-    this.chart = async (data, callback) => {
+    this.chart = (data, callback) => {
         let sql = 'call prc_chart(?,?,?,?)';
     
-        await _pool.getConnection(async(err, connection) => {
-            await connection.query(sql,     
+        _pool.getConnection(async(err, connection) => {
+            connection.query(sql,     
             [
                 data.date_ini, 
                 data.date_fin, 
                 parseInt(data.ch_id), 
                 data.mc_cd
             ], 
-            async(error, result) => {
+            (error, result) => {
                 connection.release();
-                await callback(error, result);
+                callback(error, result);
             });
         });
     };
@@ -199,18 +199,18 @@ module.exports = (api) => {
         });
     };
 
-    this.OEE = async(data, callback) => {
+    this.OEE = (data, callback) => {
         let sql = `call prc_oee(?,?,?,?);`;
-        await _pool.getConnection((err, connection) => {
+        _pool.getConnection((err, connection) => {
             connection.query(sql, [
                 parseInt(data.ch_id),
                 data.dateIni, 
                 data.dateFin,
                 data.machineCode ? data.machineCode : ''
             ], 
-            async(error, result) => {
+            (error, result) => {
                 connection.release();
-               await callback(error, result);
+               callback(error, result);
             });
         });
     };    
