@@ -90,7 +90,7 @@ module.exports = function(api) {
                 group by mpd.insert_index 
             ) a
             group by a.date_ref_format, a.machine_name, a.pause_reason
-            order by sum(pause);
+            order by date_ref_format, sum(pause);
 
             select b.machine_code
                 , sec_to_time(sum(pp)*60) as pp
