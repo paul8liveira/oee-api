@@ -68,6 +68,25 @@ module.exports = function(api) {
             }
             return res.status(200).send(results);
         });
+    }; 
+    
+    this.machineWorkingHour = function(req, res, next) {
+        var params = req.params;
+
+        //cria asserts para validação
+        req.assert('machineCode', 'Código da máquina não informado.').notEmpty();
+       
+        var errors = req.validationErrors();
+        if(errors)
+            return res.status(400).send(errors);         
+
+        _machineShift.machineWorkingHour(params, function(exception, results, fields) {
+            if(exception) {
+                return res.status(400).send(exception);
+            }
+            const [{turn}] = results;
+            return res.status(200).send(turn);
+        });
     };     
 
     return this;

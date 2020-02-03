@@ -8,6 +8,7 @@ module.exports = function(api) {
     router.post('/', _tokenController.verify, _machineShiftController.add);
     router.post('/delete', _tokenController.verify, _machineShiftController.delete);
     router.get('/oee/:channelId/:machineCode/:dateIni/:dateFin', _tokenController.verify, _machineShiftController.OEE);
+    router.get('/workinghour/:machineCode', _machineShiftController.machineWorkingHour); //n jwt
     
     return router;
 };

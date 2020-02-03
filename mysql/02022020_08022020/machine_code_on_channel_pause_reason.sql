@@ -1,0 +1,1 @@
+ alter table channel_pause_reason add column machine_code varchar(10) null;
