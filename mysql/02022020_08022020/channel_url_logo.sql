@@ -1,0 +1,1 @@
+alter table feed_config add column logo_url varchar(500) null;

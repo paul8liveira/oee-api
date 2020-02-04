@@ -19,6 +19,24 @@ module.exports = function(api) {
         });
     };   
 
+    this.logo = function(channelId, callback) {
+        var query = `
+            select coalesce(logo_url, 'https://oee-management.firebaseapp.com/assets/imgs/logo.png') as logo_url
+              from feed_config
+             where channel_id = ?;
+        `;
+        _pool.getConnection(function(err, connection) {
+            connection.query(query, 
+            [
+                parseInt(channelId)
+            ], 
+            function(error, result) {
+                connection.release();
+                callback(error, result);
+            });
+        });
+    };   
+
     this.updateConfig = function(data, callback) {        
         let query = `
             update feed_config 
@@ -29,6 +47,7 @@ module.exports = function(api) {
                              , field5 = ?
                              , refresh_time = ?
                              , chart_tooltip_desc = ?
+                             , logo_url = ?
                          where channel_id = ?
         `;
         _pool.getConnection(function(err, connection) {
@@ -41,6 +60,7 @@ module.exports = function(api) {
                 data.field5, 
                 data.refresh_time, 
                 data.chart_tooltip_desc,
+                data.logo_url,
                 data.channel_id
             ], 
             function(error, result) {

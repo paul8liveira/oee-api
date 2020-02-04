@@ -12,6 +12,18 @@ module.exports = function(api) {
         });                
     }; 
 
+    this.logo = function(req, res, next) {
+        var channelId = req.params.channel;
+        
+        _feedConfig.logo(channelId, function(exception, result) {
+            if(exception) {
+                return res.status(500).send(exception);
+            }
+            const [{logo_url}] = result;
+            res.status(200).send(JSON.stringify(logo_url));
+        });                
+    };     
+
     this.updateConfig = function(req, res, next) {
         var bodyData = req.body;
 
