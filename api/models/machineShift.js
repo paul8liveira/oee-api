@@ -68,24 +68,10 @@ module.exports = function(api) {
 
     this.machineWorkingHour = function(params, callback) {
         _pool.getConnection(function(err, connection) {
-            const query = `
-                select concat(t.hour_ini, t.hour_fin) as turn
-                from (
-                select (select replace(hour_ini, ':', '') as hour_ini
-                        from machine_shift 
-                        where machine_code = ? 
-                        order by hour_ini 
-                        limit 1) as hour_ini
-                    , (select replace(hour_fin, ':', '') as hour_fin 
-                        from machine_shift 
-                        where machine_code = ?
-                        order by hour_fin desc 
-                        limit 1) as hour_fin
-                ) t ;           
-            `
+            const query = "call prc_machine_working_hour(?,?);"
             connection.query(query, 
             [
-                params.machineCode,
+                params.token,
                 params.machineCode,
             ], 
             function(error, result) {

@@ -71,7 +71,7 @@ module.exports = function(api) {
     }; 
     
     this.machineWorkingHour = function(req, res, next) {
-        var params = req.params;
+        const { params } = req;
 
         //cria asserts para validação
         req.assert('machineCode', 'Código da máquina não informado.').notEmpty();
@@ -82,9 +82,10 @@ module.exports = function(api) {
 
         _machineShift.machineWorkingHour(params, function(exception, results, fields) {
             if(exception) {
-                return res.status(400).send(exception);
+                return res.status(400).send(exception.sqlMessage);
             }
-            const [{turn}] = results;
+            const [result] = results;
+            const [{turn}] = result;
             return res.status(200).send(turn);
         });
     };     
