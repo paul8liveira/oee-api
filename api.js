@@ -25,6 +25,7 @@ const machineShift_route = `${process.env.BASE_URL}machineshift`;
 const sponsor_route = `${process.env.BASE_URL}sponsor`;
 const alert_route = `${process.env.BASE_URL}alert`;
 const system_route = `${process.env.BASE_URL}system`;
+const product_route = `${process.env.BASE_URL}product`;
 
 //rotas que ouvimos
 api.use(index_route, api.routes.index);
@@ -47,6 +48,7 @@ api.use(machineShift_route, api.routes.machineShift);
 api.use(sponsor_route, api.routes.sponsor);
 api.use(alert_route, api.routes.alert);
 api.use(system_route, api.routes.system);
+api.use(product_route, api.routes.product);
 
 //rotas não encontradas serão respondidas por essa
 api.use((req, res, next) => {
