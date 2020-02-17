@@ -38,7 +38,7 @@ module.exports = function(api) {
         
         _product.update(body, function(exception, results, fields) {
             if(exception) {
-                return res.status(500).send(exception);
+                return res.status(400).send(exception);
             }    
             return res.send(results);           
         });            
