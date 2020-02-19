@@ -130,7 +130,7 @@ module.exports = (api) => {
     };
 
     this.chart = (data, callback) => {
-        let sql = 'call prc_chart(?,?,?,?)';
+        let sql = 'call prc_chart(?,?,?,?,?)';
     
         _pool.getConnection(async(err, connection) => {
             connection.query(sql,     
@@ -138,7 +138,8 @@ module.exports = (api) => {
                 data.date_ini, 
                 data.date_fin, 
                 parseInt(data.ch_id), 
-                data.mc_cd
+                data.mc_cd,
+                parseInt(data.chart_type)
             ], 
             (error, result) => {
                 connection.release();
