@@ -49,7 +49,7 @@ module.exports = function(api) {
         });    
     };
     
-    this.list = function(channel_id, callback) {
+    this.list = function(channel_id, machine_code, callback) {
         const query = `
             select p.*
                 , c.name as channel_name
@@ -57,12 +57,15 @@ module.exports = function(api) {
             from product p
             inner join channel c on c.id = p.channel_id
             inner join machine_data m on m.code = p.machine_code
-            where p.channel_id = ?; 
+            where p.channel_id = ?
+              and ((p.machine_code = ?) or ? = ''); 
         `;
         _pool.getConnection(function(err, connection) {
             connection.query(query, 
             [
-                parseInt(channel_id)
+                parseInt(channel_id),
+                machine_code,
+                machine_code ? machine_code : ''
             ], 
             function(error, result) {
                 connection.release();

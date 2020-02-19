@@ -7,7 +7,7 @@ module.exports = function(api) {
     router.post('/', _tokenController.verify, _productController.post);
     router.post('/update', _tokenController.verify, _productController.update);
     router.post('/delete', _tokenController.verify, _productController.delete);    
-    router.get('/:channel_id', _tokenController.verify, _productController.list);    
+    router.get('/:channel_id/:machine_code?', _tokenController.verify, _productController.list);    
     
     return router;
 };

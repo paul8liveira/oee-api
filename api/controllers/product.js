@@ -65,9 +65,9 @@ module.exports = function(api) {
     };
     
     this.list = function(req, res, next) {
-        const { channel_id } = req.params;
+        const { channel_id, machine_code } = req.params;
         
-        _product.list(channel_id, function(exception, result) {
+        _product.list(channel_id, machine_code, function(exception, result) {
             if(exception) {
                 return res.status(500).send(exception);
             }
