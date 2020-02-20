@@ -10,7 +10,7 @@ module.exports = function(api) {
                 data.date_ini,
                 data.date_fin,
                 parseInt(data.product_id),
-                parseInt(data.amount)
+                parseFloat(data.amount)
             ], 
             function(error, result) {
                 connection.release();
