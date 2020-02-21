@@ -22,46 +22,6 @@ module.exports = function(api) {
         });     
     };
     
-    // this.list = function(data, callback) {
-    //     var query = `
-    //         select f.mc_cd
-    //             , concat(f.mc_cd, ' - ', md.name) as mc_name 
-    //             , (max(f.field4 - f.field2) - (select coalesce(sum(pause), 0) 
-    //                                             from machine_pause 
-    //                                             where mc_cd = f.mc_cd
-    //                                             and date_ref = date(max(f.inserted_at)))) as pause
-    //             , time_format(
-    //                 sec_to_time(
-    //                     (max(f.field4 - f.field2)*60) - (select coalesce(sum(pause)*60, 0) 
-    //                                                         from machine_pause 
-    //                                                     where mc_cd = f.mc_cd
-    //                                                         and date_ref = date(max(f.inserted_at)))
-    //                 ), '%H:%i:%s'
-    //             ) as pause_to_time
-    //             , date_format(max(inserted_at), '%d/%m/%Y %H:%i:%s') as date
-    //             , date_format(max(inserted_at), '%d/%m/%Y') as date_ref
-    //             , null as justification
-    //         from feed	f
-    //         inner join machine_data md on md.code = f.mc_cd
-    //         inner join channel_machine cm on cm.machine_code = md.code
-    //         inner join user_channel uc on uc.channel_id = cm.channel_id
-    //         where date_format(f.inserted_at, '%d/%m/%Y') = ?
-    //           and uc.user_id = ? 
-    //         group by f.mc_cd
-    //     `;  
-    //     _pool.getConnection(function(err, connection) {
-    //         connection.query(query, 
-    //         [
-    //             data.dateIni, 
-    //             parseInt(data.userId)
-    //         ], 
-    //         function(error, result) {
-    //             connection.release();
-    //             callback(error, result);
-    //         });
-    //     });
-    // };
-    
     this.listPauses = function(data, callback) {
         var query = `
             select a.date_ref_format
