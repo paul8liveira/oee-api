@@ -8,6 +8,8 @@ module.exports = function(api) {
         req.assert('channel_id', 'Preencha o canal corretamente.').notEmpty();
         req.assert('machine_code', 'Preencha a máquina corretamente.').notEmpty();
         req.assert('name', 'Preencha o nome corretamente.').notEmpty();
+        req.assert('cycle_time', 'Preencha o tempo de ciclo corretamente.').notEmpty();
+        req.assert('measure_unit', 'Preencha o unidade de medida corretamente.').notEmpty();
 
         var errors = req.validationErrors();
         if(errors)
@@ -31,6 +33,8 @@ module.exports = function(api) {
         req.assert('machine_code', 'Preencha a máquina corretamente.').notEmpty();
         req.assert('name', 'Preencha o nome corretamente.').notEmpty();
         req.assert('id', 'Preencha o id corretamente.').notEmpty();
+        req.assert('cycle_time', 'Preencha o tempo de ciclo corretamente.').notEmpty();
+        req.assert('measure_unit', 'Preencha o unidade de medida corretamente.').notEmpty();
 
         var errors = req.validationErrors();
         if(errors)

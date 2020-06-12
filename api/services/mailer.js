@@ -17,7 +17,7 @@ module.exports = function(api) {
         // send mail with defined transport object
         await transporter.sendMail({
             from: process.env.NODEMAILER_EMAIL,
-            to: to,
+            bcc: to,
             subject: subject,
             html: html
         }, 

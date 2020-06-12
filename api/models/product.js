@@ -2,14 +2,16 @@ module.exports = function(api) {
     let _pool = api.database.connection; 
 
     this.save = function(data, callback) {
-        const query = 'call prc_product(?, ?, ?, ?);';
+        const query = 'call prc_product(?, ?, ?, ?, ?, ?);';
         _pool.getConnection(function(err, connection) {
             connection.query(query, 
             [
                 parseInt(0),
                 parseInt(data.channel_id),
                 data.machine_code,
-                data.name
+                data.name,
+                parseFloat(data.cycle_time),
+                data.measure_unit
             ], 
             function(error, result) {
                 connection.release();
@@ -19,7 +21,7 @@ module.exports = function(api) {
     };
     
     this.update = function(data, callback) {
-        const query = 'call prc_product(?, ?, ?, ?);';
+        const query = 'call prc_product(?, ?, ?, ?, ?, ?);';
         
         _pool.getConnection(function(err, connection) {
             connection.query(query, 
@@ -27,7 +29,9 @@ module.exports = function(api) {
                 parseInt(data.id),
                 parseInt(data.channel_id),
                 data.machine_code,
-                data.name
+                data.name,
+                parseFloat(data.cycle_time),
+                data.measure_unit
             ], 
             function(error, result) {
                 connection.release();
