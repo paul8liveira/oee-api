@@ -10,7 +10,8 @@ module.exports = function(api) {
             date_ini: bodyData[0].date_ref,
             date_fin: bodyData[1].date_ref,
             product_id: bodyData[0].product_id,
-            amount: bodyData[1].amount   
+            amount: bodyData[1].amount,
+            time_in_min: bodyData[1].date_dif, 
         };
 
         _machineProductDash.save(data, function(exception, result) {

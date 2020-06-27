@@ -3,14 +3,15 @@ module.exports = function(api) {
     
     this.save = function(data, callback) {
         _pool.getConnection(function(err, connection) {
-            connection.query("call prc_machine_product_dash(?,?,?,?,?,?)", 
+            connection.query("call prc_machine_product_dash(?,?,?,?,?,?,?)", 
             [
                 parseInt(data.channel_id),
                 data.machine_code,
                 data.date_ini,
                 data.date_fin,
                 parseInt(data.product_id),
-                parseFloat(data.amount)
+                parseFloat(data.amount),
+                parseInt(data.time_in_min)
             ], 
             function(error, result) {
                 connection.release();
