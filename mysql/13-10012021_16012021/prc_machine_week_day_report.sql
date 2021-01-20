@@ -3,7 +3,7 @@ DROP procedure IF EXISTS `prc_machine_week_day_report`;
 
 DELIMITER $$
 USE `oee`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_machine_week_day_report`(
+CREATE DEFINER=`root`@`%` PROCEDURE `prc_machine_week_day_report`(
 	IN p_channel_id int,
 	IN p_machine_code varchar(10),
     IN p_year_number char(4),
@@ -12,16 +12,6 @@ CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_machine_week_day_report`(
 	IN p_date_fin varchar(20)
 )
 BEGIN
-	-- quantidade produzida
-    call prc_machine_week_day_production_amount(p_channel_id, p_machine_code, p_year_number, p_week_number, p_date_ini, p_date_fin);
-
-	-- disponibilidade
-    call prc_machine_week_day_availability(p_channel_id, p_machine_code, p_year_number, p_week_number, p_date_ini, p_date_fin);
-    
-    -- desempenho
-    call prc_machine_week_day_performance(p_channel_id, p_machine_code, p_year_number, p_week_number, p_date_ini, p_date_fin);
-    
-    -- qualidade
     set @v_quality = 0;
 	set @v_pp = 0;
 	set @v_pnp = 0;
@@ -30,25 +20,31 @@ BEGIN
 	set @v_real_availability = 0;   
     set @v_amount = 0;
     
-    select coalesce(fnc_channel_quality(p_channel_id), 0) 
-      into @v_quality;
-
+	-- quantidade produzida
+    call prc_machine_week_day_production_amount(p_channel_id, p_machine_code, p_year_number, p_week_number, p_date_ini, p_date_fin);
 	select amount 
       from tmp_wd_report_amount 	  
      where machine_code = p_machine_code
-      into @v_amount;
+      into @v_amount;    
 
+	-- disponibilidade
+    call prc_machine_week_day_availability(p_channel_id, p_machine_code, p_year_number, p_week_number, p_date_ini, p_date_fin);
 	select pp
 		 , pnp
 	  from tmp_wd_report_availability 
 	 where machine_code = p_machine_code
-	  into @v_pp, @v_pnp;
-
+	  into @v_pp, @v_pnp;    
+    
+    -- desempenho
+    call prc_machine_week_day_performance(p_channel_id, p_machine_code, p_year_number, p_week_number, p_date_ini, p_date_fin, @v_pp, @v_pnp);
 	select performance
 		 , (field5 - coalesce(@v_pp, 0))
 	  from tmp_wd_report_performance 
 	 where machine_code = p_machine_code
-	  into @v_performance, @v_availability;    
+	  into @v_performance, @v_availability;       
+    
+    select coalesce(fnc_channel_quality(p_channel_id), 0) 
+      into @v_quality; 
       
 	set @v_real_availability = (@v_availability - coalesce(@v_pnp, 0));
       

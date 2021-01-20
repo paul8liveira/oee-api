@@ -18,6 +18,7 @@ BEGIN
 			 , p.pause_type
 			 , sum(p.pause) as pause              
 			 , count(0) as count
+             , concat(\'(\', count(0), \') \', p.pause_name) as pause_name_count             
 		  from (
 			select mpd.date_ref
 				 , mpd.pause_reason_id

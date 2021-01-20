@@ -3,7 +3,7 @@ DROP procedure IF EXISTS `prc_machine_week_day_availability`;
 
 DELIMITER $$
 USE `oee`$$
-CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_machine_week_day_availability`(
+CREATE DEFINER=`root`@`%` PROCEDURE `prc_machine_week_day_availability`(
 	IN p_channel_id int,
 	IN p_machine_code varchar(10),
     IN p_year_number char(4),
@@ -17,6 +17,9 @@ BEGIN
 		pp float(15,2),
 		pnp float(15,2)
 	) engine=memory;
+    
+    -- em caso de estar no mesmo contexto
+    delete from tmp_wd_report_availability;
     
 	set @v_query = '
         insert into tmp_wd_report_availability

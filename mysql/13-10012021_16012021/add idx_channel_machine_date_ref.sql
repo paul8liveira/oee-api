@@ -1,0 +1,2 @@
+alter table machine_product_dash drop index idx_channel_machine_date_ref_insert_index_pause;
+alter table machine_product_dash add index idx_channel_machine_date_ref(channel_id, machine_code, date_ref);
