@@ -19,7 +19,7 @@ begin
 	set @v_prod = 0;
     
 	if(p_week_number <> '') then
-		select sum(t.amount_cycle) as production
+		select sum(t.amount_cycle) as production 
 		  into @v_prod
 		  from (
 			select (mpd.amount * p.cycle_time) as amount_cycle

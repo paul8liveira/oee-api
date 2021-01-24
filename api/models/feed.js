@@ -214,7 +214,21 @@ module.exports = (api) => {
                callback(error, result);
             });
         });
-    };    
+    };  
+    
+    this.allChannelOEE = (data, callback) => {
+        let sql = `call prc_all_channel_oee(?,?);`;
+        _pool.getConnection((err, connection) => {
+            connection.query(sql, [
+                parseInt(data.ch_id),
+                data.dateFin,
+            ], 
+            (error, result) => {
+                connection.release();
+               callback(error, result);
+            });
+        });
+    };       
 
     return this;
 };

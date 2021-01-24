@@ -90,9 +90,20 @@ module.exports = function(api) {
             if(exception) {
                 return res.status(400).send(exception);
             }
-            res.status(200).send(result);       
+            res.status(200).send(result[0]);       
         });                 
-    };    
+    };  
+    
+    this.allChannelOEE = (req, res, next) => { 
+        var query = req.query;
+
+        _feed.allChannelOEE(query, (exception, result) => {
+            if(exception) {
+                return res.status(400).send(exception);
+            }
+            res.status(200).send(result[0]);       
+        });                 
+    };     
 
     return this;
 };

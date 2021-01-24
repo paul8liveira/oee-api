@@ -3,7 +3,7 @@ DROP procedure IF EXISTS `prc_machine_week_day_report`;
 
 DELIMITER $$
 USE `oee`$$
-CREATE DEFINER=`root`@`%` PROCEDURE `prc_machine_week_day_report`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_machine_week_day_report`(
 	IN p_channel_id int,
 	IN p_machine_code varchar(10),
     IN p_year_number char(4),
@@ -12,61 +12,46 @@ CREATE DEFINER=`root`@`%` PROCEDURE `prc_machine_week_day_report`(
 	IN p_date_fin varchar(20)
 )
 BEGIN
-    set @v_quality = 0;
-	set @v_pp = 0;
-	set @v_pnp = 0;
-	set @v_performance = 0;
-	set @v_availability = 0; 
-	set @v_real_availability = 0;   
-    set @v_amount = 0;
-    
+	-- fazer if para consultar da tabela de orr compilada caso receba a semana
+
 	-- quantidade produzida
-    call prc_machine_week_day_production_amount(p_channel_id, p_machine_code, p_year_number, p_week_number, p_date_ini, p_date_fin);
-	select amount 
-      from tmp_wd_report_amount 	  
-     where machine_code = p_machine_code
-      into @v_amount;    
+    call prc_machine_day_production(p_channel_id, p_machine_code, p_date_ini, p_date_fin);
 
 	-- disponibilidade
-    call prc_machine_week_day_availability(p_channel_id, p_machine_code, p_year_number, p_week_number, p_date_ini, p_date_fin);
-	select pp
-		 , pnp
-	  from tmp_wd_report_availability 
-	 where machine_code = p_machine_code
-	  into @v_pp, @v_pnp;    
+    call prc_machine_day_availability(p_channel_id, p_machine_code, p_date_ini, p_date_fin);
     
     -- desempenho
-    call prc_machine_week_day_performance(p_channel_id, p_machine_code, p_year_number, p_week_number, p_date_ini, p_date_fin, @v_pp, @v_pnp);
-	select performance
-		 , (field5 - coalesce(@v_pp, 0))
-	  from tmp_wd_report_performance 
-	 where machine_code = p_machine_code
-	  into @v_performance, @v_availability;       
+    call prc_machine_day_performance(p_channel_id, p_machine_code, p_date_ini, p_date_fin);
     
-    select coalesce(fnc_channel_quality(p_channel_id), 0) 
-      into @v_quality; 
+    -- qualidade
+    set @v_quality = fnc_channel_quality(p_channel_id);
       
-	set @v_real_availability = (@v_availability - coalesce(@v_pnp, 0));
-      
-	drop table tmp_wd_report_amount;
-    drop table tmp_wd_report_availability;
-    drop table tmp_wd_report_performance;
+	select p_channel_id as channel_id
+		 , t.machine_code as machine_code
+		 , m.name as machine_name
+         , round(coalesce(t.amount, 0), 2) as amount
+		 , if(t.availability = 0, 0, round(((t.real_availability / t.availability) * 100), 2)) as availability
+		 , round((t.performance * 100 ), 2) as performance
+		 , @v_quality as quality
+		 , if(t.availability = 0, 0, round(coalesce(((t.performance) * (t.real_availability / t.availability) * @v_quality), 0), 2)) as oee 
+	  from (
+		select p.machine_code
+			 , a.pp
+			 , a.pnp
+			 , p.performance
+			 , (p.field5 - coalesce(a.pp, 0)) as availability
+			 , ((p.field5 - coalesce(a.pp, 0)) - coalesce(a.pnp, 0)) as real_availability
+             , pr.amount
+		  from tmp_machine_day_performance p
+		 inner join tmp_machine_day_production pr on pr.machine_code = p.machine_code
+          left join tmp_machine_day_availability a on a.machine_code = p.machine_code
+          
+	) t
+	inner join machine_data m on m.code = t.machine_code;    
     
-    -- channel_id, machine_code, availability, performance, quality, oee
-    select p_channel_id as channel_id
-	     , p_machine_code as machine_code
-         , round(coalesce(@v_amount, 0), 2) as amount
-		 , concat(if(
-			@v_availability = 0, 0, 
-			round(((@v_real_availability / @v_availability) * 100), 2)
-		 ), '%') as availability
-		 , concat(round((@v_performance * 100), 2), '%') as performance
-		 , concat(@v_quality, '%') as quality
-		 , concat(if(
-			@v_availability = 0, 0, 
-			round(coalesce((@v_performance * (@v_real_availability / @v_availability) * @v_quality),0), 2)
-		 ), '%') as oee 
-	  from dual;
+	drop table tmp_machine_day_production;
+    drop table tmp_machine_day_availability;
+    drop table tmp_machine_day_performance;
 END$$
 
 DELIMITER ;

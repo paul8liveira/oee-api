@@ -4,7 +4,7 @@ module.exports = function(api) {
     this.chartGauge = function(data, callback) {
         let sql = `
             call prc_commands_executer(?,?,?,?,?);
-            call prc_oee(?,?,?,?);
+            call prc_all_channel_oee(?,?);
         `;
         _pool.getConnection(function(err, connection) {
             connection.query(sql, [
@@ -13,10 +13,8 @@ module.exports = function(api) {
                 data.date, 
                 data.date, 
                 "mobile_gauge_chart",
-                parseInt(data.channelId),    
-                data.dateIni, 
-                data.dateFin,
-                data.machineCode === 'null' ? '' : data.machineCode                
+                parseInt(data.channelId),
+                data.dateFin,           
             ], 
             function(error, result) {
                 connection.release();

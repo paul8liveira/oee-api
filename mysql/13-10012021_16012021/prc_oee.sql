@@ -1,8 +1,3 @@
-USE `oee`;
-DROP procedure IF EXISTS `prc_oee`;
-
-DELIMITER $$
-USE `oee`$$
 CREATE DEFINER=`root`@`%` PROCEDURE `prc_oee`(
 	IN p_channel_id int,
 	IN p_date_ini varchar(20),
@@ -134,6 +129,4 @@ begin
 	 inner join machine_data m on m.code = t.machine_code;
     
     select * from tmp_oee;
-end$$
-
-DELIMITER ;
+end
