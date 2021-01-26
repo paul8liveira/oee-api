@@ -17,7 +17,7 @@ BEGIN
 		select p_channel_id as channel_id
              , machine_code
 			 , machine_name
-			 , round(avg(production), 2) as amount
+			 , round(sum(production), 2) as amount
 			 , round(avg(availability), 2) as availability
 			 , round(avg(performance), 2) as performance
 			 , round(avg(quality), 2) as quality
