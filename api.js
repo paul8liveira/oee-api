@@ -28,6 +28,7 @@ const system_route = `${process.env.BASE_URL}system`;
 const product_route = `${process.env.BASE_URL}product`;
 const machineProductDash_route = `${process.env.BASE_URL}machineproductdash`;
 const machineWeekDayReport_route = `${process.env.BASE_URL}machine-week-day-report`;
+const sectorWeekDayReport_route = `${process.env.BASE_URL}sector-week-day-report`;
 const channelSector_route = `${process.env.BASE_URL}channel-sector`;
 
 //rotas que ouvimos
@@ -55,6 +56,7 @@ api.use(product_route, api.routes.product);
 api.use(machineProductDash_route, api.routes.machineProductDash);
 api.use(machineWeekDayReport_route, api.routes.machineWeekDayReport);
 api.use(channelSector_route, api.routes.channelSector);
+api.use(sectorWeekDayReport_route, api.routes.sectorWeekDayReport);
 
 //rotas não encontradas serão respondidas por essa
 api.use((req, res, next) => {

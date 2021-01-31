@@ -3,7 +3,7 @@ DROP procedure IF EXISTS `prc_sector_week_day_report`;
 
 DELIMITER $$
 USE `oee`$$
-CREATE PROCEDURE `prc_sector_week_day_report`(
+CREATE DEFINER=`root`@`localhost` PROCEDURE `prc_sector_week_day_report`(
 	IN p_channel_id int,
 	IN p_sector_id int,
     IN p_year_number char(4),
@@ -36,7 +36,14 @@ BEGIN
 		where weekday not in (5,6)
 		group by machine_code, week; 
 	else     
-		select oee.*
+		select oee.channel_id
+             , oee.machine_code
+             , oee.machine_name
+             , oee.production
+             , round(oee.availability, 2) as availability
+             , round(oee.performance, 2) as performance
+             , round(oee.quality, 2) as quality
+             , round(oee.oee, 2) as oee
 		  from daily_oee oee
 		  join machine_data m on m.code = oee.machine_code
 		 where oee.channel_id = p_channel_id
