@@ -17,10 +17,10 @@ module.exports = function (api) {
   };
 
   this.chart = function (req, res) {
-    const { channelId, sectorId, yearNumber, weekNumber, dateIni, dateFin } = req.query;
+    const { channelId, sectorId, yearNumber, weekNumber, dateIni, dateEnd } = req.query;
 
     _sectorWeekDayReport.chart(
-      { channelId, sectorId, yearNumber, weekNumber, dateIni, dateFin },
+      { channelId, sectorId, yearNumber, weekNumber, dateIni, dateEnd },
       function (exception, result) {
         if (exception) {
           return res.status(400).send(exception);
