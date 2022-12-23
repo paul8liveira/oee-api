@@ -38,7 +38,7 @@
     "express": "^4.16.2",
     "express-validator": "^5.0.0",
     "js2xmlparser": "^3.0.0",
-    "jsonwebtoken": "^8.2.0",
+    "jsonwebtoken": "^9.0.0",
     "moment": "^2.24.0",
     "mysql": "^2.15.0",
     "node-excel-export": "^1.4.4",
