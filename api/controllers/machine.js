@@ -104,7 +104,11 @@ module.exports = function(api) {
         var machineId = req.params.machine;
         var params = req.query;  
             params.mc_cd = machineId;
-                
+
+        if ( params.token == undefined ){
+            return res.status(401).send('Informe o Token');
+        }
+        
         _machine.autenticateToken(params.token, function(exception, result) {
             if(exception) {
                 res.status(500).send(exception);
@@ -128,7 +132,11 @@ module.exports = function(api) {
         var code = req.params.machine;
         var params = req.query;  
             params.code = code;
-                
+            
+        if ( params.token == undefined ){
+            return res.status(401).send('Informe o Token');
+        }
+        
         _machine.autenticateToken(params.token, function(exception, result) {
             if(exception) {
                 res.status(500).send(exception);
@@ -144,7 +152,7 @@ module.exports = function(api) {
                 return res.status(200).send(results[0].state);
             });            
         });                
-    };     
+    };
 
     this.setState = function(req, res, next) {
         var bodyData = req.body;
